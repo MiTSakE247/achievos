@@ -1,13 +1,14 @@
-package com.mdx.achievos.achievos.api;
+package com.mdx.achievos.api;
 
-import com.mdx.achievos.achievos.dto.UserAccountRequest;
-import com.mdx.achievos.achievos.entity.User;
-import com.mdx.achievos.achievos.service.UserService;
+import com.mdx.achievos.dto.UserAccountRequest;
+import com.mdx.achievos.entity.User;
+import com.mdx.achievos.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

@@ -1,15 +1,15 @@
-package com.mdx.achievos.achievos.service;
+package com.mdx.achievos.service;
 
-import com.mdx.achievos.achievos.dto.UserAccountRequest;
-import com.mdx.achievos.achievos.entity.User;
-import com.mdx.achievos.achievos.repo.UserRepo;
+import com.mdx.achievos.dto.UserAccountRequest;
+import com.mdx.achievos.entity.User;
+import com.mdx.achievos.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 
-import static com.mdx.achievos.achievos.util.AppUtility.*;
+import static com.mdx.achievos.util.AppUtility.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
 
     private User getUser(UserAccountRequest userAccountRequest) {
         User user = new User();
+        user.setName(userAccountRequest.getName());
         user.setUsername(userAccountRequest.getUsername());
         user.setUserEmail(userAccountRequest.getUserEmail());
         user.setPasswordHash(userAccountRequest.getPasswordHash());

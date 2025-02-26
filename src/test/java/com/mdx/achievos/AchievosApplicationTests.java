@@ -1,4 +1,4 @@
-package com.mdx.achievos.achievos;
+package com.mdx.achievos;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

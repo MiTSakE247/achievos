@@ -1,6 +1,6 @@
-package com.mdx.achievos.achievos.repo;
+package com.mdx.achievos.repo;
 
-import com.mdx.achievos.achievos.entity.User;
+import com.mdx.achievos.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

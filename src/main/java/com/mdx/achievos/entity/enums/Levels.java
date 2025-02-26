@@ -1,4 +1,4 @@
-package com.mdx.achievos.achievos.entity.enums;
+package com.mdx.achievos.entity.enums;
 
 public enum Levels {
     NOVICE,

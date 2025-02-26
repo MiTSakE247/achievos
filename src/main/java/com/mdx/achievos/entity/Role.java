@@ -1,6 +1,6 @@
-package com.mdx.achievos.achievos.entity;
+package com.mdx.achievos.entity;
 
-import com.mdx.achievos.achievos.entity.enums.UserRoles;
+import com.mdx.achievos.entity.enums.UserRoles;
 import jakarta.persistence.*;
 
 @Entity

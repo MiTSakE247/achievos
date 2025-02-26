@@ -1,6 +1,6 @@
-package com.mdx.achievos.achievos.entity;
+package com.mdx.achievos.entity;
 
-import com.mdx.achievos.achievos.entity.enums.UserStatus;
+import com.mdx.achievos.entity.enums.UserStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,6 +11,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+    private String name;
     private String username;
     private String userEmail;
     private String passwordHash;
@@ -35,6 +36,14 @@ public class User {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {
@@ -129,6 +138,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
+                ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +

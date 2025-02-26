@@ -1,4 +1,4 @@
-package com.mdx.achievos.achievos.util;
+package com.mdx.achievos.util;
 
 import java.util.Map;
 import java.util.HashMap;

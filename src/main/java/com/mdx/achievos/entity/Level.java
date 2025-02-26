@@ -1,6 +1,6 @@
-package com.mdx.achievos.achievos.entity;
+package com.mdx.achievos.entity;
 
-import com.mdx.achievos.achievos.entity.enums.Levels;
+import com.mdx.achievos.entity.enums.Levels;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

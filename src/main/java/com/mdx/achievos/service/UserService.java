@@ -1,7 +1,7 @@
-package com.mdx.achievos.achievos.service;
+package com.mdx.achievos.service;
 
-import com.mdx.achievos.achievos.dto.UserAccountRequest;
-import com.mdx.achievos.achievos.entity.User;
+import com.mdx.achievos.dto.UserAccountRequest;
+import com.mdx.achievos.entity.User;
 
 import java.util.List;
 
