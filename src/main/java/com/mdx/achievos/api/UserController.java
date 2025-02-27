@@ -25,7 +25,17 @@ public class UserController {
     }
 
     @PostMapping
-    public String addUser(@RequestBody UserAccountRequest userAccountRequest) {
-        return userService.addUser(userAccountRequest);
+    public String addUser(@RequestBody UserAccountRequest request) {
+        return userService.addUser(request);
+    }
+
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable Long id, @RequestBody UserAccountRequest request) {
+        return userService.updateUser(id, request);
+    }
+
+    @PatchMapping("/{id}")
+    public String updatePassword(@PathVariable Long id, @RequestBody UserAccountRequest request) {
+        return userService.patchUser(id, request);
     }
 }

@@ -9,5 +9,9 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    String addUser(UserAccountRequest userAccountRequest);
+    String addUser(UserAccountRequest request);
+
+    String updateUser(Long userId, UserAccountRequest request);
+
+    String patchUser(Long userId, UserAccountRequest request);
 }
