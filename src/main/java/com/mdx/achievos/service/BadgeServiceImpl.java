@@ -70,6 +70,7 @@ public class BadgeServiceImpl implements BadgeService {
             badge.setBadgeCategory(request.getBadgeCategory());
         }
 
+        badgeRepo.save(badge);
         return "Badge updated successfully";
     }
 

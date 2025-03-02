@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/badge-transaction")
+@RequestMapping("/api/award-badge")
 public class UserBadgeController {
 
     private final UserBadgeService userBadgeService;
