@@ -72,6 +72,10 @@ public class UserAccountRequest {
         this.newPasswordHash = newPasswordHash;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
     @Override
     public String toString() {
         return "UserAccountRequest{" +

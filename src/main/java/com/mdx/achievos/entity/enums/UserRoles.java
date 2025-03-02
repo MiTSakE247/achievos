@@ -1,12 +1,22 @@
 package com.mdx.achievos.entity.enums;
 
 public enum UserRoles {
-    EMPLOYEE,
-    MANAGER,
-    TEAM_LEAD,
-    SUPERVISOR,
-    DIRECTOR,
-    VP,
-    C_LEVEL,
-    INTERN
+    INTERN(0),
+    EMPLOYEE(1),
+    TEAM_LEAD(2),
+    SUPERVISOR(3),
+    MANAGER(4),
+    DIRECTOR(5),
+    VP(6),
+    C_LEVEL(7);
+
+    private final int level;
+
+    UserRoles(int level) {
+        this.level = level;
+    }
+
+    public int getLevel() {
+        return level;
+    }
 }

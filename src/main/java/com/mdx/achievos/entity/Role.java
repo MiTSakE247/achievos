@@ -9,10 +9,11 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
-    private Enum<UserRoles> roleName;
+    @Enumerated(EnumType.STRING)
+    private UserRoles roleName;
     private String roleBadge;
     private String roleDescription;
-    private Integer roleLevel;
+//    private Integer roleLevel;
 
     public Role() {
 
@@ -26,11 +27,11 @@ public class Role {
         this.roleId = roleId;
     }
 
-    public Enum<UserRoles> getRoleName() {
+    public UserRoles getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(Enum<UserRoles> roleName) {
+    public void setRoleName(UserRoles roleName) {
         this.roleName = roleName;
     }
 
@@ -50,13 +51,13 @@ public class Role {
         this.roleDescription = roleDescription;
     }
 
-    public Integer getRoleLevel() {
-        return roleLevel;
-    }
-
-    public void setRoleLevel(Integer roleLevel) {
-        this.roleLevel = roleLevel;
-    }
+//    public Integer getRoleLevel() {
+//        return roleLevel;
+//    }
+//
+//    public void setRoleLevel(Integer roleLevel) {
+//        this.roleLevel = roleLevel;
+//    }
 
     @Override
     public String toString() {
@@ -65,7 +66,7 @@ public class Role {
                 ", roleName='" + roleName + '\'' +
                 ", roleBadge='" + roleBadge + '\'' +
                 ", roleDescription='" + roleDescription + '\'' +
-                ", roleLevel=" + roleLevel +
+//                ", roleLevel=" + roleLevel +
                 '}';
     }
 }

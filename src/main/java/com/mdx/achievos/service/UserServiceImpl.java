@@ -1,6 +1,7 @@
 package com.mdx.achievos.service;
 
 import com.mdx.achievos.dto.UserAccountRequest;
+import com.mdx.achievos.dto.UserLoginRequest;
 import com.mdx.achievos.entity.User;
 import com.mdx.achievos.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,7 @@ import static com.mdx.achievos.util.AppUtility.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepo userRepo;
+    private final UserRepo userRepo;
 
     public UserServiceImpl(UserRepo userRepo) {
         this.userRepo = userRepo;
@@ -85,6 +85,8 @@ public class UserServiceImpl implements UserService {
             fields += "Bio";
         }
 
+        user.setUpdatedAt(request.getUpdatedAt());
+
         userRepo.save(user);
 
 
@@ -104,6 +106,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = optionalUser.get();
+        user.setUpdatedAt(request.getUpdatedAt());
 
         // check is User wants to update username
         if (request.getUsername() != null) {
@@ -130,6 +133,22 @@ public class UserServiceImpl implements UserService {
         userRepo.save(user);
 
         return "Password successfully updated";
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        Optional<User> optionalUser = userRepo.findById(userId);
+
+        return optionalUser.orElse(null);
+    }
+
+    @Override
+    public User getUserByCred(UserLoginRequest request) {
+        User user = userRepo.findByUserEmail(request.getUserEmail());
+        if (! user.getPasswordHash().equals(request.getPasswordHash())) {
+            return null;
+        }
+        return user;
     }
 
     private User createUser(UserAccountRequest request) {

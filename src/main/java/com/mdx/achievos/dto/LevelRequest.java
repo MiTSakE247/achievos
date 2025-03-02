@@ -1,32 +1,28 @@
-package com.mdx.achievos.entity;
+package com.mdx.achievos.dto;
 
 import com.mdx.achievos.entity.enums.Levels;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="levels")
-public class Level {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long levelId;
+public class LevelRequest {
+    private Long userId;
     @Enumerated(EnumType.STRING)
     private Levels levelName;
     private Integer minXp;
     private Integer maxXp;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
-    public Level() {
+    public LevelRequest() {
     }
 
-    public Long getLevelId() {
-        return levelId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setLevelId(Long levelId) {
-        this.levelId = levelId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Levels getLevelName() {
@@ -53,30 +49,18 @@ public class Level {
         this.maxXp = maxXp;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     @Override
     public String toString() {
-        return "Level{" +
-                "levelId=" + levelId +
+        return "LevelRequest{" +
+                "userId=" + userId +
                 ", levelName=" + levelName +
                 ", minXp=" + minXp +
                 ", maxXp=" + maxXp +
-                ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
     }
