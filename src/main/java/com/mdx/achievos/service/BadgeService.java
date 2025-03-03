@@ -15,4 +15,5 @@ public interface BadgeService {
 
     String deleteBadge(Long badgeId);
 
+    Badge getBadgeById(Long badgeId);
 }

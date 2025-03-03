@@ -100,4 +100,7 @@ public class BadgeServiceImpl implements BadgeService {
         return badge;
     }
 
+    public Badge getBadgeById(Long badgeId) {
+        return badgeRepo.findById(badgeId).orElse(null);
+    }
 }

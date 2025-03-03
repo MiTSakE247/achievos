@@ -25,7 +25,7 @@ public class BadgeController {
     }
 
     @PostMapping
-    public String addBagde(@RequestBody BadgeRequest request) {
+    public String addBadge(@RequestBody BadgeRequest request) {
         return badgeService.addBadge(request);
     }
 
@@ -38,4 +38,10 @@ public class BadgeController {
     public String deleteBadge(@PathVariable("id") Long badgeId) {
         return badgeService.deleteBadge(badgeId);
     }
+
+    @GetMapping("/{id}")
+    public Badge getBadgeById(@PathVariable("id") Long badgeId) {
+        return badgeService.getBadgeById(badgeId);
+    }
+
 }

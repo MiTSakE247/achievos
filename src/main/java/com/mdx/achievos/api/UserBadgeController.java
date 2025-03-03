@@ -3,6 +3,7 @@ package com.mdx.achievos.api;
 import com.mdx.achievos.dto.AwardBadgeRequest;
 import com.mdx.achievos.entity.Badge;
 import com.mdx.achievos.entity.User;
+import com.mdx.achievos.entity.UserBadge;
 import com.mdx.achievos.service.UserBadgeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,13 @@ public class UserBadgeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<Badge>> getBadges(@PathVariable("id") Long userid) {
+    public ResponseEntity<List<UserBadge>> getUserBadges(@PathVariable("id") Long userid) {
         return ResponseEntity.ok(userBadgeService.getAllUserBadges(userid));
+    }
+
+    @GetMapping("/by/{id}")
+    public ResponseEntity<List<UserBadge>> getUserBadgesByGrantedBy(@PathVariable("id") Long grantedBy) {
+        return ResponseEntity.ok(userBadgeService.getAllUserBadgesByGrantedBy(grantedBy));
     }
 
     @PostMapping

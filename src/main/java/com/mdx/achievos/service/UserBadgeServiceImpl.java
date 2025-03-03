@@ -26,14 +26,20 @@ public class UserBadgeServiceImpl implements UserBadgeService {
     }
 
     @Override
-    public List<Badge> getAllUserBadges(Long userId) {
-        List<UserBadge> userBadges = userBadgeRepo.findAllUserBadgeByUserId(userId);
-        List<Badge> badges = new ArrayList<>();
-        for (UserBadge ub : userBadges) {
-            // hard coded for now
-            badges.add(badgeRepo.findById(ub.getBadgeId()).orElse(null));
-        }
-        return badges;
+    public List<UserBadge> getAllUserBadges(Long userId) {
+//        List<UserBadge> userBadges = userBadgeRepo.findAllUserBadgeByUserId(userId);
+//        List<Badge> badges = new ArrayList<>();
+//        for (UserBadge ub : userBadges) {
+//            // hard coded for now
+//            badges.add(badgeRepo.findById(ub.getBadgeId()).orElse(null));
+//        }
+//        return badges;
+        return userBadgeRepo.findAllUserBadgeByUserId(userId);
+    }
+
+    @Override
+    public List<UserBadge> getAllUserBadgesByGrantedBy(Long grantedBy) {
+        return userBadgeRepo.findAllUserBadgeByGrantedBy(grantedBy);
     }
 
     @Override
