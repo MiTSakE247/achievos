@@ -1,5 +1,8 @@
 package com.mdx.achievos.entity.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum BadgeTier {
     IRON(0),
     BRONZE(1),
@@ -14,7 +17,4 @@ public enum BadgeTier {
         this.rarity = rarity;
     }
 
-    public int getRarity() {
-        return rarity;
-    }
 }

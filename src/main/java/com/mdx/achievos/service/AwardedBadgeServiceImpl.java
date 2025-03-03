@@ -1,32 +1,30 @@
 package com.mdx.achievos.service;
 
 import com.mdx.achievos.dto.AwardBadgeRequest;
-import com.mdx.achievos.entity.Badge;
-import com.mdx.achievos.entity.UserBadge;
+import com.mdx.achievos.entity.AwardedBadge;
 import com.mdx.achievos.repo.BadgeRepo;
 import com.mdx.achievos.repo.UserBadgeRepo;
 import com.mdx.achievos.repo.UserRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
-public class UserBadgeServiceImpl implements UserBadgeService {
+public class AwardedBadgeServiceImpl implements AwardedBadgeService {
 
     private final UserBadgeRepo userBadgeRepo;
     private final UserRepo userRepo;
     private final BadgeRepo badgeRepo;
 
-    public UserBadgeServiceImpl(UserBadgeRepo userBadgeRepo, UserRepo userRepo, BadgeRepo badgeRepo) {
+    public AwardedBadgeServiceImpl(UserBadgeRepo userBadgeRepo, UserRepo userRepo, BadgeRepo badgeRepo) {
         this.userBadgeRepo = userBadgeRepo;
         this.userRepo = userRepo;
         this.badgeRepo = badgeRepo;
     }
 
     @Override
-    public List<UserBadge> getAllUserBadges(Long userId) {
+    public List<AwardedBadge> getAllUserBadges(Long userId) {
 //        List<UserBadge> userBadges = userBadgeRepo.findAllUserBadgeByUserId(userId);
 //        List<Badge> badges = new ArrayList<>();
 //        for (UserBadge ub : userBadges) {
@@ -38,7 +36,7 @@ public class UserBadgeServiceImpl implements UserBadgeService {
     }
 
     @Override
-    public List<UserBadge> getAllUserBadgesByGrantedBy(Long grantedBy) {
+    public List<AwardedBadge> getAllUserBadgesByGrantedBy(Long grantedBy) {
         return userBadgeRepo.findAllUserBadgeByGrantedBy(grantedBy);
     }
 
@@ -58,15 +56,15 @@ public class UserBadgeServiceImpl implements UserBadgeService {
         return "Badge awarded successfully!";
     }
 
-    public UserBadge createUserBadge(AwardBadgeRequest request) {
-        UserBadge userBadge = new UserBadge();
+    public AwardedBadge createUserBadge(AwardBadgeRequest request) {
+        AwardedBadge awardedBadge = new AwardedBadge();
 
-        userBadge.setUserId(request.getUserId());
-        userBadge.setBadgeId(request.getBadgeId());
-        userBadge.setComments(request.getComments());
-        userBadge.setEarnedAt(request.getEarnedAt());
-        userBadge.setGrantedBy(request.getGrantedBy());
+        awardedBadge.setUserId(request.getUserId());
+        awardedBadge.setBadgeId(request.getBadgeId());
+        awardedBadge.setComments(request.getComments());
+        awardedBadge.setEarnedAt(request.getEarnedAt());
+        awardedBadge.setGrantedBy(request.getGrantedBy());
 
-        return userBadge;
+        return awardedBadge;
     }
 }

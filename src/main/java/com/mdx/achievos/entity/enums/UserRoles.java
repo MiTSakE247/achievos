@@ -1,5 +1,8 @@
 package com.mdx.achievos.entity.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum UserRoles {
     INTERN(0),
     EMPLOYEE(1),
@@ -16,7 +19,4 @@ public enum UserRoles {
         this.level = level;
     }
 
-    public int getLevel() {
-        return level;
-    }
 }

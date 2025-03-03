@@ -1,14 +1,14 @@
 package com.mdx.achievos.repo;
 
-import com.mdx.achievos.entity.UserBadge;
+import com.mdx.achievos.entity.AwardedBadge;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UserBadgeRepo extends JpaRepository<UserBadge, Long> {
+public interface UserBadgeRepo extends JpaRepository<AwardedBadge, Long> {
 
-    public List<UserBadge> findAllUserBadgeByUserId(Long userId);
+    public List<AwardedBadge> findAllUserBadgeByUserId(Long userId);
 
-    public List<UserBadge> findAllUserBadgeByGrantedBy(Long grantedBy);
+    public List<AwardedBadge> findAllUserBadgeByGrantedBy(Long grantedBy);
 
 }

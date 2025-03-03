@@ -1,5 +1,8 @@
 package com.mdx.achievos.entity.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum BadgeStatus {
     ACTIVE(1),
     REVOKE(0);
@@ -10,7 +13,4 @@ public enum BadgeStatus {
         this.status = status;
     }
 
-    public int getStatus() {
-        return status;
-    }
 }
