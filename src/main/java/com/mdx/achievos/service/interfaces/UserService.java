@@ -1,4 +1,4 @@
-package com.mdx.achievos.service;
+package com.mdx.achievos.service.interfaces;
 
 import com.mdx.achievos.dto.UserAccountRequest;
 import com.mdx.achievos.dto.UserLoginRequest;

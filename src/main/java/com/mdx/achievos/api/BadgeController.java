@@ -2,7 +2,7 @@ package com.mdx.achievos.api;
 
 import com.mdx.achievos.dto.BadgeRequest;
 import com.mdx.achievos.entity.Badge;
-import com.mdx.achievos.service.BadgeService;
+import com.mdx.achievos.service.interfaces.BadgeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

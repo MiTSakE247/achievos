@@ -1,10 +1,10 @@
-package com.mdx.achievos.service;
+package com.mdx.achievos.service.impl;
 
 import com.mdx.achievos.dto.UserAccountRequest;
 import com.mdx.achievos.dto.UserLoginRequest;
 import com.mdx.achievos.entity.User;
 import com.mdx.achievos.repo.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mdx.achievos.service.interfaces.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

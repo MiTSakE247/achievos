@@ -2,7 +2,7 @@ package com.mdx.achievos.api;
 
 import com.mdx.achievos.dto.AwardBadgeRequest;
 import com.mdx.achievos.entity.AwardedBadge;
-import com.mdx.achievos.service.AwardedBadgeService;
+import com.mdx.achievos.service.interfaces.AwardedBadgeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

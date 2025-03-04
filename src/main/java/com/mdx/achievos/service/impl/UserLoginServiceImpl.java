@@ -1,14 +1,15 @@
-package com.mdx.achievos.service;
+package com.mdx.achievos.service.impl;
 
 import com.mdx.achievos.dto.UserLoginRequest;
 import com.mdx.achievos.entity.User;
 import com.mdx.achievos.repo.UserRepo;
+import com.mdx.achievos.service.interfaces.UserLoginService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
-public class UserLoginServiceImpl implements UserLoginService{
+public class UserLoginServiceImpl implements UserLoginService {
     private final UserRepo userRepo;
 
     public UserLoginServiceImpl(UserRepo userRepo) {

@@ -1,8 +1,9 @@
-package com.mdx.achievos.service;
+package com.mdx.achievos.service.impl;
 
 import com.mdx.achievos.dto.LevelRequest;
 import com.mdx.achievos.entity.Level;
 import com.mdx.achievos.repo.LevelRepo;
+import com.mdx.achievos.service.interfaces.LevelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

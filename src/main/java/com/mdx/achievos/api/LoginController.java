@@ -1,7 +1,7 @@
 package com.mdx.achievos.api;
 
 import com.mdx.achievos.dto.UserLoginRequest;
-import com.mdx.achievos.service.UserLoginService;
+import com.mdx.achievos.service.interfaces.UserLoginService;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin

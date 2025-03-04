@@ -1,10 +1,11 @@
-package com.mdx.achievos.service;
+package com.mdx.achievos.service.impl;
 
 import com.mdx.achievos.dto.AwardBadgeRequest;
 import com.mdx.achievos.entity.AwardedBadge;
 import com.mdx.achievos.repo.BadgeRepo;
 import com.mdx.achievos.repo.UserBadgeRepo;
 import com.mdx.achievos.repo.UserRepo;
+import com.mdx.achievos.service.interfaces.AwardedBadgeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

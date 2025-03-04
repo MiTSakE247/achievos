@@ -3,8 +3,7 @@ package com.mdx.achievos.api;
 import com.mdx.achievos.dto.UserAccountRequest;
 import com.mdx.achievos.dto.UserLoginRequest;
 import com.mdx.achievos.entity.User;
-import com.mdx.achievos.service.UserService;
-import org.springframework.context.ApplicationContext;
+import com.mdx.achievos.service.interfaces.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
