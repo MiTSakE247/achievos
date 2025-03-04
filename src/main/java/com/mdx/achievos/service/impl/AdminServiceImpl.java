@@ -1,6 +1,6 @@
 package com.mdx.achievos.service.impl;
 
-import com.mdx.achievos.dto.LevelRequest;
+import com.mdx.achievos.dto.request.LevelRequest;
 import com.mdx.achievos.entity.Role;
 import com.mdx.achievos.entity.User;
 import com.mdx.achievos.service.interfaces.AdminService;

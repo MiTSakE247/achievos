@@ -1,8 +1,11 @@
 package com.mdx.achievos.api;
 
-import com.mdx.achievos.dto.AwardBadgeRequest;
+import com.mdx.achievos.dto.ApiResponse;
+import com.mdx.achievos.dto.request.AwardedBadgeRequest;
+import com.mdx.achievos.dto.response.AwardedBadgeResponse;
 import com.mdx.achievos.entity.AwardedBadge;
 import com.mdx.achievos.service.interfaces.AwardedBadgeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,22 +23,22 @@ public class AwardedBadgeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<AwardedBadge>> getUserBadges(@PathVariable("id") Long userid) {
-        return ResponseEntity.ok(awardedBadgeService.getAllUserBadges(userid));
+    public ResponseEntity<ApiResponse<List<AwardedBadge>>> getUserBadges(@PathVariable("id") Long userid) {
+        List<AwardedBadge> badges = awardedBadgeService.getAllUserBadges(userid);
+        return ResponseEntity.ok(new ApiResponse<>(true, "User badges retrieved successfully", badges));
     }
 
     @GetMapping("/by/{id}")
-    public ResponseEntity<List<AwardedBadge>> getUserBadgesByGrantedBy(@PathVariable("id") Long grantedBy) {
-        return ResponseEntity.ok(awardedBadgeService.getAllUserBadgesByGrantedBy(grantedBy));
+    public ResponseEntity<ApiResponse<List<AwardedBadge>>> getUserBadgesByGrantedBy(@PathVariable("id") Long grantedBy) {
+        List<AwardedBadge> badges = awardedBadgeService.getAllUserBadgesByGrantedBy(grantedBy);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Badges granted by user retrieved successfully", badges));
     }
 
     @PostMapping
-    public String awardBadge(@RequestBody AwardBadgeRequest request) {
-        System.out.println(request);
-        System.out.println(request.getUserId());
-        System.out.println(request.getGrantedBy());
-        System.out.println(request.getBadgeId());
-        return awardedBadgeService.awardBadge(request);
+    public ResponseEntity<ApiResponse<AwardedBadgeResponse>> awardBadge(@RequestBody AwardedBadgeRequest request) {
+        AwardedBadgeResponse awardedBadge = awardedBadgeService.awardBadge(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(true, "Badge awarded successfully", awardedBadge));
     }
 
 }

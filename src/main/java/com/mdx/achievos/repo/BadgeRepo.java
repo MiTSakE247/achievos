@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BadgeRepo extends JpaRepository<Badge, Long> {
+    boolean existsByBadgeName(String badgeName);
 }

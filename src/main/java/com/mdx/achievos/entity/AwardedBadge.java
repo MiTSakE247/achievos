@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class AwardedBadge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userBadgeId;
+    private Long awardedBadgeId;
 
     private LocalDateTime earnedAt;
 

@@ -1,7 +1,10 @@
 package com.mdx.achievos.service.impl;
 
-import com.mdx.achievos.dto.UserLoginRequest;
+import com.mdx.achievos.dto.request.UserLoginRequest;
+import com.mdx.achievos.dto.response.UserLoginResponse;
 import com.mdx.achievos.entity.User;
+import com.mdx.achievos.exception.BadRequestException;
+import com.mdx.achievos.exception.EntityNotFoundException;
 import com.mdx.achievos.repo.UserRepo;
 import com.mdx.achievos.service.interfaces.UserLoginService;
 import org.springframework.stereotype.Service;
@@ -17,17 +20,23 @@ public class UserLoginServiceImpl implements UserLoginService {
     }
 
     @Override
-    public String loginUser(UserLoginRequest request) {
-        if(Objects.isNull(request)) {
-            return "Request is Empty!";
+    public UserLoginResponse loginUser(UserLoginRequest request) {
+        if (Objects.isNull(request) || request.getUserEmail() == null || request.getPasswordHash() == null) {
+            throw new BadRequestException("Request is empty or missing required fields.");
         }
-        String userEmail = request.getUserEmail();
-        String passwordHash = request.getPasswordHash();
 
-        User user = userRepo.findByUserEmail(userEmail);
-        if(user.getPasswordHash().equals(passwordHash)) {
-            return "AUTHENTICATION_SUCCESS:" + passwordHash + ":" + user.getUserId();
+        User user = userRepo.findByUserEmail(request.getUserEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Invalid credentials!"));
+
+        if (!user.getPasswordHash().equals(request.getPasswordHash())) {
+            throw new BadRequestException("Invalid credentials!");
         }
-        return "AUTHENTICATION_FAILED";
+
+        return new UserLoginResponse(
+                user.getUserId(),
+                user.getUsername(),
+                user.getUserEmail()
+        );
     }
+
 }

@@ -1,15 +1,17 @@
 package com.mdx.achievos.service.impl;
 
-import com.mdx.achievos.dto.UserAccountRequest;
-import com.mdx.achievos.dto.UserLoginRequest;
+import com.mdx.achievos.dto.request.UserAccountRequest;
+import com.mdx.achievos.dto.request.UserLoginRequest;
 import com.mdx.achievos.entity.User;
+import com.mdx.achievos.exception.BadRequestException;
+import com.mdx.achievos.exception.DuplicateResourceException;
+import com.mdx.achievos.exception.EntityNotFoundException;
 import com.mdx.achievos.repo.UserRepo;
 import com.mdx.achievos.service.interfaces.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.mdx.achievos.util.AppUtility.*;
 
@@ -28,127 +30,120 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addUser(UserAccountRequest request) {
+    public UserAccountRequest addUser(UserAccountRequest request) {
         if (Objects.isNull(request)) {
-            return "Request body is empty";
+            throw new BadRequestException("Request body is empty.");
         }
 
-        // check for standard input otherwise return
         if (!isValidEmail(request.getUserEmail())) {
-            return "Email is not valid";
+            throw new BadRequestException("Email is not valid.");
         }
 
-        // check is user already exists by the column - username, email
-        if (userRepo.findByUsername(request.getUsername()) != null ||
-                userRepo.findByUserEmail(request.getUserEmail()) != null) {
-            return "Account already exists";
+        if (userRepo.findByUsername(request.getUsername()).isPresent() ||
+                userRepo.findByUserEmail(request.getUserEmail()).isPresent()) {
+            throw new DuplicateResourceException("Account with this username or email already exists.");
         }
 
         User user = createUser(request);
         userRepo.save(user);
-        return "User saved successfully";
+
+        UserAccountRequest response = new UserAccountRequest();
+        response.setName(user.getName());
+        response.setUserEmail(user.getUserEmail());
+        response.setProfilePic(user.getProfilePic());
+        response.setBio(user.getBio());
+
+        return response;
     }
 
     @Override
-    public String updateUser(Long userId, UserAccountRequest request) {
+    public UserAccountRequest updateUser(Long userId, UserAccountRequest request) {
         if (Objects.isNull(request)) {
-            return "Request is empty";
+            throw new BadRequestException("Request body is empty.");
         }
 
-        Optional<User> optionalUser = userRepo.findById(userId);
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
-        if (optionalUser.isEmpty()) {
-            return "User not found!";
-        }
-
-        User user = optionalUser.get();
-        String fields = "[";
-
-        // update the provided details except email, password, userStatus, role for now
+        // Update user fields if provided
         if (request.getName() != null) {
             user.setName(request.getName());
-            fields += "Name, ";
         }
 
         if (request.getUsername() != null) {
             user.setUsername(request.getUsername());
-            fields += "Username, ";
         }
 
         if (request.getProfilePic() != null) {
             user.setProfilePic(request.getProfilePic());
-            fields += "Profile Pic, ";
         }
 
         if (request.getBio() != null) {
             user.setBio(request.getBio());
-            fields += "Bio";
         }
 
-        user.setUpdatedAt(request.getUpdatedAt());
-
+        // Save updated user
         userRepo.save(user);
-
-
-        return "User updated successfully. Updated fields: " + fields + "]";
+        // Return updated details as DTO
+        return new UserAccountRequest(
+                user.getName(),
+                user.getUsername(),
+                user.getUserEmail(),
+                null, // Do not return password hash for security reasons
+                null, // newPasswordHash should be null
+                user.getProfilePic(),
+                user.getBio()
+        );
     }
 
     @Override
-    public String patchUser(Long userId, UserAccountRequest request) {
+    public UserAccountRequest patchUser(Long userId, UserAccountRequest request) {
         if (Objects.isNull(request)) {
-            return "Request is empty";
+            throw new BadRequestException("Request body is empty.");
         }
 
-        Optional<User> optionalUser = userRepo.findById(userId);
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
-        if (optionalUser.isEmpty()) {
-            return "User not found!";
-        }
-
-        User user = optionalUser.get();
-        user.setUpdatedAt(request.getUpdatedAt());
-
-        // check is User wants to update username
+        // Check if username needs updating
         if (request.getUsername() != null) {
             user.setUsername(request.getUsername());
-            userRepo.save(user);
-            return "Username successfully updated";
         }
 
-        String currentPassword = "", newPassword = "";
-
-        if (request.getPasswordHash() != null) {
-            currentPassword = request.getPasswordHash();
+        // Handle password update correctly
+        if (request.getPasswordHash() != null && request.getNewPasswordHash() != null) {
+            if (!user.getPasswordHash().equals(request.getPasswordHash())) {
+                throw new BadRequestException("Current password is incorrect.");
+            }
+            user.setPasswordHash(request.getNewPasswordHash());
         }
 
-        if (request.getNewPasswordHash() != null) {
-            newPassword = request.getNewPasswordHash();
-        }
-
-        if (!currentPassword.equals(newPassword)) {
-            return "Current password doesn't match!";
-        }
-
-        user.setPasswordHash(newPassword);
+        // Save updated user
         userRepo.save(user);
 
-        return "Password successfully updated";
+        // Return updated user as DTO
+        return new UserAccountRequest(
+                user.getName(),
+                user.getUsername(),
+                user.getUserEmail(),
+                null, // Hide password for security
+                null, // Hide new password
+                user.getProfilePic(),
+                user.getBio()
+        );
     }
 
     @Override
     public User getUserById(Long userId) {
-        Optional<User> optionalUser = userRepo.findById(userId);
-
-        return optionalUser.orElse(null);
+        return userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
     }
 
     @Override
     public User getUserByCred(UserLoginRequest request) {
-        User user = userRepo.findByUserEmail(request.getUserEmail());
-        if (! user.getPasswordHash().equals(request.getPasswordHash())) {
-            return null;
-        }
-        return user;
+        return userRepo.findByUserEmail(request.getUserEmail())
+                .filter(user -> user.getPasswordHash().equals(request.getPasswordHash()))
+                .orElseThrow(() -> new EntityNotFoundException("Invalid credentials!"));
     }
 
     private User createUser(UserAccountRequest request) {

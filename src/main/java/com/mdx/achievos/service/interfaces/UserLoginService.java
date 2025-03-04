@@ -1,7 +1,8 @@
 package com.mdx.achievos.service.interfaces;
 
-import com.mdx.achievos.dto.UserLoginRequest;
+import com.mdx.achievos.dto.request.UserLoginRequest;
+import com.mdx.achievos.dto.response.UserLoginResponse;
 
 public interface UserLoginService {
-    String loginUser(UserLoginRequest request);
+    UserLoginResponse loginUser(UserLoginRequest request);
 }

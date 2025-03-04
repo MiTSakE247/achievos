@@ -1,7 +1,7 @@
 package com.mdx.achievos.service.interfaces;
 
-import com.mdx.achievos.dto.UserAccountRequest;
-import com.mdx.achievos.dto.UserLoginRequest;
+import com.mdx.achievos.dto.request.UserAccountRequest;
+import com.mdx.achievos.dto.request.UserLoginRequest;
 import com.mdx.achievos.entity.User;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -11,11 +11,11 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    String addUser(UserAccountRequest request);
+    UserAccountRequest addUser(UserAccountRequest request);
 
-    String updateUser(Long userId, UserAccountRequest request);
+    UserAccountRequest updateUser(Long userId, UserAccountRequest request);
 
-    String patchUser(Long userId, UserAccountRequest request);
+    UserAccountRequest patchUser(Long userId, UserAccountRequest request);
 
     User getUserById(Long userId);
 

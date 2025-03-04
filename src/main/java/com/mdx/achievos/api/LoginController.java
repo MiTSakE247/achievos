@@ -1,7 +1,10 @@
 package com.mdx.achievos.api;
 
-import com.mdx.achievos.dto.UserLoginRequest;
+import com.mdx.achievos.dto.ApiResponse;
+import com.mdx.achievos.dto.request.UserLoginRequest;
+import com.mdx.achievos.dto.response.UserLoginResponse;
 import com.mdx.achievos.service.interfaces.UserLoginService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -16,7 +19,9 @@ public class LoginController {
     }
 
     @PostMapping
-    public String login(@RequestBody UserLoginRequest request) {
-        return userLoginService.loginUser(request);
+    public ResponseEntity<ApiResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+        UserLoginResponse loginResponse = userLoginService.loginUser(request);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Login successful", loginResponse));
     }
+
 }

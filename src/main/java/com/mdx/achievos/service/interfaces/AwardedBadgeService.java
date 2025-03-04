@@ -1,6 +1,7 @@
 package com.mdx.achievos.service.interfaces;
 
-import com.mdx.achievos.dto.AwardBadgeRequest;
+import com.mdx.achievos.dto.request.AwardedBadgeRequest;
+import com.mdx.achievos.dto.response.AwardedBadgeResponse;
 import com.mdx.achievos.entity.AwardedBadge;
 
 import java.util.List;
@@ -11,6 +12,6 @@ public interface AwardedBadgeService {
 
     List<AwardedBadge> getAllUserBadgesByGrantedBy(Long grantedBy);
 
-    String awardBadge(AwardBadgeRequest request);
+    AwardedBadgeResponse awardBadge(AwardedBadgeRequest request);
 
 }

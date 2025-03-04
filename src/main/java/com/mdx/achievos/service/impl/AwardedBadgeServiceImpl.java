@@ -1,7 +1,10 @@
 package com.mdx.achievos.service.impl;
 
-import com.mdx.achievos.dto.AwardBadgeRequest;
+import com.mdx.achievos.dto.request.AwardedBadgeRequest;
+import com.mdx.achievos.dto.response.AwardedBadgeResponse;
 import com.mdx.achievos.entity.AwardedBadge;
+import com.mdx.achievos.exception.BadRequestException;
+import com.mdx.achievos.exception.EntityNotFoundException;
 import com.mdx.achievos.repo.BadgeRepo;
 import com.mdx.achievos.repo.UserBadgeRepo;
 import com.mdx.achievos.repo.UserRepo;
@@ -42,22 +45,43 @@ public class AwardedBadgeServiceImpl implements AwardedBadgeService {
     }
 
     @Override
-    public String awardBadge(AwardBadgeRequest request) {
+    public AwardedBadgeResponse awardBadge(AwardedBadgeRequest request) {
         if (Objects.isNull(request)) {
-            return "Request is empty!";
+            throw new BadRequestException("Request body is empty!");
         }
 
         Long userId = request.getUserId();
         Long grantedBy = request.getGrantedBy();
         Long badgeId = request.getBadgeId();
 
-        System.out.println(userId + " " + grantedBy + " " + badgeId);
-        // compare grantedBy User should have higher role level to give badge
-        userBadgeRepo.save(createUserBadge(request));
-        return "Badge awarded successfully!";
+        if (!userRepo.existsById(userId)) {
+            throw new EntityNotFoundException("User not found with ID: " + userId);
+        }
+
+        if (!badgeRepo.existsById(badgeId)) {
+            throw new EntityNotFoundException("Badge not found with ID: " + badgeId);
+        }
+
+        // Validate if grantedBy has higher authority (TODO: Implement role level validation)
+        if (!userRepo.existsById(grantedBy)) {
+            throw new EntityNotFoundException("Granting user not found with ID: " + grantedBy);
+        }
+
+        AwardedBadge awardedBadge = createUserBadge(request);
+        awardedBadge = userBadgeRepo.save(awardedBadge);
+
+        return new AwardedBadgeResponse(
+                awardedBadge.getAwardedBadgeId(),
+                awardedBadge.getUserId(),
+                awardedBadge.getBadgeId(),
+                awardedBadge.getGrantedBy(),
+                awardedBadge.getStatus(),
+                awardedBadge.getComments(),
+                awardedBadge.getEarnedAt()
+        );
     }
 
-    public AwardedBadge createUserBadge(AwardBadgeRequest request) {
+    public AwardedBadge createUserBadge(AwardedBadgeRequest request) {
         AwardedBadge awardedBadge = new AwardedBadge();
 
         awardedBadge.setUserId(request.getUserId());

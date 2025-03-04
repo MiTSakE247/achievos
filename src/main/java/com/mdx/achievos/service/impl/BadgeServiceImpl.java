@@ -1,7 +1,11 @@
 package com.mdx.achievos.service.impl;
 
-import com.mdx.achievos.dto.BadgeRequest;
+import com.mdx.achievos.dto.request.BadgeRequest;
+import com.mdx.achievos.dto.response.BadgeResponse;
 import com.mdx.achievos.entity.Badge;
+import com.mdx.achievos.exception.BadRequestException;
+import com.mdx.achievos.exception.DuplicateResourceException;
+import com.mdx.achievos.exception.EntityNotFoundException;
 import com.mdx.achievos.repo.BadgeRepo;
 import com.mdx.achievos.service.interfaces.BadgeService;
 import org.springframework.stereotype.Service;
@@ -25,27 +29,25 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public String addBadge(BadgeRequest request) {
+    public BadgeResponse addBadge(BadgeRequest request) {
         if (Objects.isNull(request)) {
-            return "Request body empty!";
+            throw new BadRequestException("Request body is empty!");
+        }
+
+        if (badgeRepo.existsByBadgeName(request.getBadgeName())) {
+            throw new DuplicateResourceException("Badge with this name already exists.");
         }
 
         Badge badge = createBadge(request);
-
         badgeRepo.save(badge);
-        return "Badge successfully saved";
+
+        return convertToResponseDTO(badge);
     }
 
     @Override
-    public String updateBadge(Long badgeId, BadgeRequest request) {
-        Optional<Badge> optionalBadge = badgeRepo.findById(badgeId);
-
-        if (optionalBadge.isEmpty()) {
-            return "Badge does not exist";
-        }
-
-        Badge badge = optionalBadge.get();
-        badge.setUpdatedAt(request.getUpdatedAt());
+    public BadgeResponse updateBadge(Long badgeId, BadgeRequest request) {
+        Badge badge = badgeRepo.findById(badgeId)
+                .orElseThrow(() -> new EntityNotFoundException("Badge not found with ID: " + badgeId));
 
         if (request.getBadgeName() != null) {
             badge.setBadgeName(request.getBadgeName());
@@ -72,20 +74,16 @@ public class BadgeServiceImpl implements BadgeService {
         }
 
         badgeRepo.save(badge);
-        return "Badge updated successfully";
+
+        return convertToResponseDTO(badge);
     }
 
     @Override
-    public String deleteBadge(Long badgeId) {
-        Optional<Badge> optionalBadge = badgeRepo.findById(badgeId);
+    public void deleteBadge(Long badgeId) {
+        Badge badge = badgeRepo.findById(badgeId)
+                .orElseThrow(() -> new EntityNotFoundException("Badge not found with ID: " + badgeId));
 
-        if (optionalBadge.isEmpty()) {
-            return "Badge does not exist";
-        }
-
-        Badge badge = optionalBadge.get();
         badgeRepo.delete(badge);
-        return "Badge deleted successfully";
     }
 
     private Badge createBadge(BadgeRequest request) {
@@ -99,6 +97,20 @@ public class BadgeServiceImpl implements BadgeService {
         badge.setBadgeCategory(request.getBadgeCategory());
 
         return badge;
+    }
+
+    private BadgeResponse convertToResponseDTO(Badge badge) {
+        return new BadgeResponse(
+                badge.getBadgeId(),
+                badge.getBadgeName(),
+                badge.getBadgeDescription(),
+                badge.getBadgeImg(),
+                badge.getBadgeXp(),
+                badge.getBadgeTier(),
+                badge.getBadgeCategory(),
+                badge.getCreatedAt(),
+                badge.getUpdatedAt()
+        );
     }
 
     public Badge getBadgeById(Long badgeId) {

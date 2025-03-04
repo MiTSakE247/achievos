@@ -1,6 +1,6 @@
 package com.mdx.achievos.service.interfaces;
 
-import com.mdx.achievos.dto.LevelRequest;
+import com.mdx.achievos.dto.request.LevelRequest;
 import com.mdx.achievos.entity.Level;
 
 import java.util.List;
