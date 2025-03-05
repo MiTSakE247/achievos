@@ -39,6 +39,10 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Email is not valid.");
         }
 
+        if (isEmpty(request.getUsername()) || isEmpty(request.getUserEmail()) || isEmpty(request.getPasswordHash())) {
+            throw new BadRequestException("Required fields are missing or empty.");
+        }
+
         if (userRepo.findByUsername(request.getUsername()).isPresent() ||
                 userRepo.findByUserEmail(request.getUserEmail()).isPresent()) {
             throw new DuplicateResourceException("Account with this username or email already exists.");
@@ -60,6 +64,10 @@ public class UserServiceImpl implements UserService {
     public UserAccountRequest updateUser(Long userId, UserAccountRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException("Request body is empty.");
+        }
+
+        if (isEmpty(request.getUsername()) || isEmpty(request.getUserEmail()) || isEmpty(request.getPasswordHash())) {
+            throw new BadRequestException("Required fields are missing or empty.");
         }
 
         User user = userRepo.findById(userId)
@@ -84,6 +92,7 @@ public class UserServiceImpl implements UserService {
 
         // Save updated user
         userRepo.save(user);
+
         // Return updated details as DTO
         return new UserAccountRequest(
                 user.getName(),
@@ -100,6 +109,10 @@ public class UserServiceImpl implements UserService {
     public UserAccountRequest patchUser(Long userId, UserAccountRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException("Request body is empty.");
+        }
+
+        if (isEmpty(request.getUsername()) || isEmpty(request.getUserEmail()) || isEmpty(request.getPasswordHash())) {
+            throw new BadRequestException("Required fields are missing or empty.");
         }
 
         User user = userRepo.findById(userId)
@@ -154,6 +167,10 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(request.getPasswordHash());
         // role & level can be assigned by admin
         return user;
+    }
+
+    private boolean isEmpty(String value) {
+        return value == null || value.trim().isEmpty();
     }
 
 }
