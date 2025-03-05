@@ -44,7 +44,7 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<UserAccountRequest>> updatePassword(@PathVariable("id") Long id, @RequestBody UserAccountRequest request) {
         UserAccountRequest updatedPassword = userService.patchUser(id, request);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Password updated successfully", updatedPassword));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Credentials updated successfully", updatedPassword));
     }
 
     // will delete this

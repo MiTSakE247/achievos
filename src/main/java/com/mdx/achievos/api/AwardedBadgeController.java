@@ -24,14 +24,14 @@ public class AwardedBadgeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<List<AwardedBadge>>> getUserBadges(@PathVariable("id") Long userid) {
-        List<AwardedBadge> badges = awardedBadgeService.getAllUserBadges(userid);
+    public ResponseEntity<ApiResponse<List<AwardedBadge>>> getAwardedBadges(@PathVariable("id") Long userid) {
+        List<AwardedBadge> badges = awardedBadgeService.getAllAwardedBadges(userid);
         return ResponseEntity.ok(new ApiResponse<>(true, "User badges retrieved successfully", badges));
     }
 
     @GetMapping("/by/{id}")
-    public ResponseEntity<ApiResponse<List<AwardedBadge>>> getUserBadgesByGrantedBy(@PathVariable("id") Long grantedBy) {
-        List<AwardedBadge> badges = awardedBadgeService.getAllUserBadgesByGrantedBy(grantedBy);
+    public ResponseEntity<ApiResponse<List<AwardedBadge>>> getAwardedBadgesByGrantedBy(@PathVariable("id") Long grantedBy) {
+        List<AwardedBadge> badges = awardedBadgeService.getAllAwardedBadgesByGrantedBy(grantedBy);
         return ResponseEntity.ok(new ApiResponse<>(true, "Badges granted by user retrieved successfully", badges));
     }
 

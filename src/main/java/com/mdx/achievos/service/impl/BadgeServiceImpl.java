@@ -34,6 +34,10 @@ public class BadgeServiceImpl implements BadgeService {
             throw new BadRequestException("Request body is empty!");
         }
 
+        if (isEmpty(request.getBadgeName())) {
+            throw new BadRequestException("Required fields are missing or empty.");
+        }
+
         if (badgeRepo.existsByBadgeName(request.getBadgeName())) {
             throw new DuplicateResourceException("Badge with this name already exists.");
         }
@@ -46,8 +50,20 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public BadgeResponse updateBadge(Long badgeId, BadgeRequest request) {
+        if (Objects.isNull(request)) {
+            throw new BadRequestException("Request body is empty!");
+        }
+
+        if (isEmpty(request.getBadgeName())) {
+            throw new BadRequestException("Required fields are missing or empty.");
+        }
+
         Badge badge = badgeRepo.findById(badgeId)
                 .orElseThrow(() -> new EntityNotFoundException("Badge not found with ID: " + badgeId));
+
+        if (!request.getBadgeName().equals(badge.getBadgeName()) && badgeRepo.existsByBadgeName(request.getBadgeName())) {
+            throw new DuplicateResourceException("Badge with this name already exists.");
+        }
 
         if (request.getBadgeName() != null) {
             badge.setBadgeName(request.getBadgeName());
@@ -114,6 +130,10 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     public Badge getBadgeById(Long badgeId) {
-        return badgeRepo.findById(badgeId).orElse(null);
+        return badgeRepo.findById(badgeId).orElseThrow(() -> new EntityNotFoundException("Badge not found with ID: " + badgeId));
+    }
+
+    private boolean isEmpty(String value) {
+        return value == null || value.trim().isEmpty();
     }
 }

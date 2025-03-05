@@ -30,12 +30,18 @@ public class AwardedBadgeServiceImpl implements AwardedBadgeService {
     }
 
     @Override
-    public List<AwardedBadge> getAllUserBadges(Long userId) {
+    public List<AwardedBadge> getAllAwardedBadges(Long userId) {
+        if (!userRepo.existsById(userId)) {
+            throw new EntityNotFoundException("User not found with ID: " + userId);
+        }
         return awardedBadgeRepo.findAllUserBadgeByUserId(userId);
     }
 
     @Override
-    public List<AwardedBadge> getAllUserBadgesByGrantedBy(Long grantedBy) {
+    public List<AwardedBadge> getAllAwardedBadgesByGrantedBy(Long grantedBy) {
+        if (!userRepo.existsById(grantedBy)) {
+            throw new EntityNotFoundException("Granting user not found with ID: " + grantedBy);
+        }
         return awardedBadgeRepo.findAllUserBadgeByGrantedBy(grantedBy);
     }
 
@@ -43,6 +49,10 @@ public class AwardedBadgeServiceImpl implements AwardedBadgeService {
     public AwardedBadgeResponse awardBadge(AwardedBadgeRequest request) {
         if (Objects.isNull(request)) {
             throw new BadRequestException("Request body is empty!");
+        }
+
+        if (request.getUserId() == null || request.getGrantedBy() == null || request.getBadgeId() == null) {
+            throw new BadRequestException("Required fields are missing or empty.");
         }
 
         Long userId = request.getUserId();
@@ -121,6 +131,10 @@ public class AwardedBadgeServiceImpl implements AwardedBadgeService {
         awardedBadge.setGrantedBy(request.getGrantedBy());
 
         return awardedBadge;
+    }
+
+    private boolean isEmpty(String value) {
+        return value == null || value.trim().isEmpty();
     }
 
 }

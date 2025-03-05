@@ -78,10 +78,6 @@ public class UserServiceImpl implements UserService {
             user.setName(request.getName());
         }
 
-        if (request.getUsername() != null) {
-            user.setUsername(request.getUsername());
-        }
-
         if (request.getProfilePic() != null) {
             user.setProfilePic(request.getProfilePic());
         }
@@ -117,6 +113,11 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
+        // current username is being updated and the new username is available
+        if (!user.getUsername().equals(request.getUsername()) && userRepo.findByUsername(request.getUsername()).isPresent()) {
+            throw new DuplicateResourceException("Account with this username already exists.");
+        }
 
         // Check if username needs updating
         if (request.getUsername() != null) {

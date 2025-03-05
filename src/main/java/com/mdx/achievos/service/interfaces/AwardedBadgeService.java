@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface AwardedBadgeService {
 
-    List<AwardedBadge> getAllUserBadges(Long userId);
+    List<AwardedBadge> getAllAwardedBadges(Long userId);
 
-    List<AwardedBadge> getAllUserBadgesByGrantedBy(Long grantedBy);
+    List<AwardedBadge> getAllAwardedBadgesByGrantedBy(Long grantedBy);
 
     List<AwardedBadgeResponse> getRecentAwardedBadges();
 
