@@ -3,6 +3,7 @@ package com.mdx.achievos.api;
 import com.mdx.achievos.dto.ApiResponse;
 import com.mdx.achievos.dto.request.AwardedBadgeRequest;
 import com.mdx.achievos.dto.response.AwardedBadgeResponse;
+import com.mdx.achievos.dto.response.LeaderboardResponse;
 import com.mdx.achievos.entity.AwardedBadge;
 import com.mdx.achievos.service.interfaces.AwardedBadgeService;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,18 @@ public class AwardedBadgeController {
     public ResponseEntity<ApiResponse<List<AwardedBadge>>> getUserBadgesByGrantedBy(@PathVariable("id") Long grantedBy) {
         List<AwardedBadge> badges = awardedBadgeService.getAllUserBadgesByGrantedBy(grantedBy);
         return ResponseEntity.ok(new ApiResponse<>(true, "Badges granted by user retrieved successfully", badges));
+    }
+
+    @GetMapping("/recent")
+    public ResponseEntity<ApiResponse<List<AwardedBadgeResponse>>> getRecentAwardedBadges() {
+        List<AwardedBadgeResponse> badges = awardedBadgeService.getRecentAwardedBadges();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Recent badges retrieved successfully", badges));
+    }
+
+    @GetMapping("/leaderboard/xp")
+    public ResponseEntity<ApiResponse<List<LeaderboardResponse>>> getLeaderboardByXp() {
+        List<LeaderboardResponse> leaderboard = awardedBadgeService.getLeaderboardByXp();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Leaderboard retrieved successfully", leaderboard));
     }
 
     @PostMapping

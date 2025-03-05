@@ -2,46 +2,41 @@ package com.mdx.achievos.service.impl;
 
 import com.mdx.achievos.dto.request.AwardedBadgeRequest;
 import com.mdx.achievos.dto.response.AwardedBadgeResponse;
+import com.mdx.achievos.dto.response.LeaderboardResponse;
 import com.mdx.achievos.entity.AwardedBadge;
 import com.mdx.achievos.exception.BadRequestException;
 import com.mdx.achievos.exception.EntityNotFoundException;
 import com.mdx.achievos.repo.BadgeRepo;
-import com.mdx.achievos.repo.UserBadgeRepo;
+import com.mdx.achievos.repo.AwardedBadgeRepo;
 import com.mdx.achievos.repo.UserRepo;
 import com.mdx.achievos.service.interfaces.AwardedBadgeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class AwardedBadgeServiceImpl implements AwardedBadgeService {
 
-    private final UserBadgeRepo userBadgeRepo;
+    private final AwardedBadgeRepo awardedBadgeRepo;
     private final UserRepo userRepo;
     private final BadgeRepo badgeRepo;
 
-    public AwardedBadgeServiceImpl(UserBadgeRepo userBadgeRepo, UserRepo userRepo, BadgeRepo badgeRepo) {
-        this.userBadgeRepo = userBadgeRepo;
+    public AwardedBadgeServiceImpl(AwardedBadgeRepo awardedBadgeRepo, UserRepo userRepo, BadgeRepo badgeRepo) {
+        this.awardedBadgeRepo = awardedBadgeRepo;
         this.userRepo = userRepo;
         this.badgeRepo = badgeRepo;
     }
 
     @Override
     public List<AwardedBadge> getAllUserBadges(Long userId) {
-//        List<UserBadge> userBadges = userBadgeRepo.findAllUserBadgeByUserId(userId);
-//        List<Badge> badges = new ArrayList<>();
-//        for (UserBadge ub : userBadges) {
-//            // hard coded for now
-//            badges.add(badgeRepo.findById(ub.getBadgeId()).orElse(null));
-//        }
-//        return badges;
-        return userBadgeRepo.findAllUserBadgeByUserId(userId);
+        return awardedBadgeRepo.findAllUserBadgeByUserId(userId);
     }
 
     @Override
     public List<AwardedBadge> getAllUserBadgesByGrantedBy(Long grantedBy) {
-        return userBadgeRepo.findAllUserBadgeByGrantedBy(grantedBy);
+        return awardedBadgeRepo.findAllUserBadgeByGrantedBy(grantedBy);
     }
 
     @Override
@@ -68,7 +63,7 @@ public class AwardedBadgeServiceImpl implements AwardedBadgeService {
         }
 
         AwardedBadge awardedBadge = createUserBadge(request);
-        awardedBadge = userBadgeRepo.save(awardedBadge);
+        awardedBadge = awardedBadgeRepo.save(awardedBadge);
 
         return new AwardedBadgeResponse(
                 awardedBadge.getAwardedBadgeId(),
@@ -81,6 +76,41 @@ public class AwardedBadgeServiceImpl implements AwardedBadgeService {
         );
     }
 
+    @Override
+    public List<AwardedBadgeResponse> getRecentAwardedBadges() {
+        List<AwardedBadge> badges = awardedBadgeRepo.findTop50ByOrderByEarnedAtDesc();
+
+        if (badges == null || badges.isEmpty()) {
+            throw new EntityNotFoundException("No recent badges found.");
+        }
+
+        return badges.stream().map(badge -> new AwardedBadgeResponse(
+                badge.getAwardedBadgeId(),
+                badge.getUserId(),
+                badge.getBadgeId(),
+                badge.getGrantedBy(),
+                badge.getStatus(),
+                badge.getComments(),
+                badge.getEarnedAt()
+        )).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LeaderboardResponse> getLeaderboardByXp() {
+        List<Object[]> results = awardedBadgeRepo.getLeaderboardByXpNative();
+
+        if (results == null || results.isEmpty()) {
+            throw new EntityNotFoundException("Leaderboard data not found.");
+        }
+
+        return results.stream().map(obj -> new LeaderboardResponse(
+                ((Number) obj[0]).longValue(),  // userId
+                (String) obj[1],               // username
+                ((Number) obj[2]).intValue()   // totalXp
+        )).toList();
+    }
+
+
     public AwardedBadge createUserBadge(AwardedBadgeRequest request) {
         AwardedBadge awardedBadge = new AwardedBadge();
 
@@ -92,4 +122,5 @@ public class AwardedBadgeServiceImpl implements AwardedBadgeService {
 
         return awardedBadge;
     }
+
 }
